@@ -14,7 +14,32 @@ view: users {
     type: yesno
     sql:
     {%condition a_b_gender %} ${gender} {% endcondition %};;
-    }
+  }
+
+  parameter: name_param {
+    type: string
+  }
+
+  dimension: matches_name {
+    type: yesno
+    sql: {% parameter name_param %} = ${first_name} ;;
+  }
+
+  dimension: first_name {
+    type: string
+    sql: ${TABLE}.first_name ;;
+    html: <font face="Arial" color="green">{{value}}</font> ;;
+  }
+
+  dimension: filtered_name {
+    type: string
+    sql: CASE WHEN {% parameter name_param %} != ${first_name}
+         THEN  ${first_name}
+          ELSE
+          "nope"
+          END;;
+  }
+
 
 #   dimension: case_test {
 #     type: number
@@ -49,10 +74,10 @@ view: users {
   #   ;;
   # }
 
-  dimension: test_tag {
-    type: string
-    sql: "{{ _user_attributes['limit_view'] }}" ;;
-  }
+#   dimension: test_tag {
+#     type: string
+#     sql: "{{ _user_attributes['limit_view'] }}" ;;
+#   }
 
 
   dimension: age {
@@ -113,9 +138,9 @@ view: users {
 
   }
 
-parameter: jon {
-  type: string
-}
+  parameter: jon {
+    type: string
+  }
 
 # # 10 Equal Buckets
   parameter: bucket_number{
@@ -284,11 +309,6 @@ parameter: jon {
     sql: ${TABLE}.email ;;
   }
 
-  dimension: first_name {
-    type: string
-    sql: ${TABLE}.first_name ;;
-    html: <font face="Arial" color="green">{{value}}</font> ;;
-  }
 
   dimension: gender {
     type: string
